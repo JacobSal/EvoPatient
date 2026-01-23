@@ -1,3 +1,14 @@
+<a name="readme-top"></a>
+<h1 align="center">
+LLMs Can Simulate Standardized Patients via Agent Coevolution
+</h1>
+
+<p align="center">
+    <a href="https://arxiv.org/abs/2412.11716"><img src="https://img.shields.io/badge/arXiv-2412.11716-B31B1B.svg?logo=arxiv" alt="arXiv"></a>
+    <a href=https://github.com/ZJUMAI/EvoPatient"><img src="https://img.shields.io/badge/GitHub-Repository-2D8CFF.svg?logo=github" alt="GitHub Repository"></a>
+    <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0"></a>
+</p>
+
 # EvoPatient
 The official repository for our paper [LLMs Can Simulate Standardized Patients via Agent Coevolution](https://arxiv.org/abs/2412.11716).
 
