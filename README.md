@@ -1,14 +1,6 @@
 # EvoPatient
 The official repository for our paper [LLMs Can Simulate Standardized Patients via Agent Coevolution](https://arxiv.org/abs/2412.11716).
 
-## A Note from the Author
-*As the author, I would like to share a few words at the beginning. This project was initially developed when I first entered graduate school, together with several collaborators who shared a strong interest in multi-agent systems. Since we were often working remotely, parts of the code inevitably became somewhat repetitive and loosely organized. I apologize for that.*
-
-*Many researchers have recently reached out to ask whether this code could be open-sourced. After careful consideration, I decided to release it as is — as a demo version of our internal system — even though it has not been fully cleaned up. I understand that reproducing a complex multi-agent system can be time-consuming, and I hope this repository can serve as a useful reference or starting point for others to build upon and improve.*
-
-*I welcome anyone to contact me by email if you need assistance in reproducing or extending the system. When time allows, I plan to continue refining and improving this project. I believe that sharing — even if imperfect — is better than withholding, and that “something is better than nothing.”*
-
-
 # Simulated Patient System
 
 A multi-agent simulation system for medical diagnosis that mimics patient-doctor interactions using large language models. This is the official repository for the paper "[LLMs Can Simulate Standardized Patients via Agent Coevolution](https://arxiv.org/abs/2412.11716)".
