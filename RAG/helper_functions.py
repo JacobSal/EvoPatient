@@ -6,7 +6,7 @@ from langchain_community.vectorstores import FAISS
 # from langchain.chat_models import BaseChatModel, Field
 from pydantic import BaseModel, Field
 from langchain_core.prompts import PromptTemplate
-import fitz
+import pymupdf as fitz
 from typing import List
 from rank_bm25 import BM25Okapi
 import asyncio

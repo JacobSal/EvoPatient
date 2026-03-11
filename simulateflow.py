@@ -16,7 +16,7 @@ from Simulated.simulated_patient.api_call import llm_api  # for LLM calls (shoul
 
 
 # ====== Environment variables (keys not stored, actual reading inside llm_api) ======
-load_dotenv()
+load_dotenv(override=True)
 if not os.getenv("OPENAI_API_KEY"):
     raise RuntimeError("OPENAI_API_KEY not detected; please set it in the system or .env.")
 

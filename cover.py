@@ -13,7 +13,7 @@ from Simulated.simulated_patient.agent_evolve import get_text_embedding
 
 
 # ============== Environment variables (privacy hidden, keys read internally by llm_api) ==============
-load_dotenv()
+load_dotenv(override=True)
 if not os.getenv("OPENAI_API_KEY"):
     raise RuntimeError("OPENAI_API_KEY not detected; please set it in the system or .env.")
 

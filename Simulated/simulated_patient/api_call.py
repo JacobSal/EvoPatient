@@ -1,6 +1,9 @@
 import os
 import re
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv(override=True)  # Load environment variables from .env file (if it exists)
 
 # ===== Read configuration from environment variables =====
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
