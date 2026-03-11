@@ -4,15 +4,15 @@ from openai import OpenAI
 
 
 def get_embeddings(text: str):
-    """从环境变量读取配置，调用 DashScope/OpenAI 接口生成文本向量。"""
-    # 加载环境变量
+    """Read configuration from environment variables and call DashScope/OpenAI API to generate text embeddings."""
+    # Load environment variables
     load_dotenv()
 
     api_key = os.getenv("OPENAI_API_KEY")
     base_url = os.getenv("OPENAI_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
 
     if not api_key:
-        raise RuntimeError("未检测到 OPENAI_API_KEY，请在 .env 或系统环境中设置。")
+        raise RuntimeError("OPENAI_API_KEY not detected; please set it in .env or the system environment.")
 
     client = OpenAI(api_key=api_key, base_url=base_url)
 

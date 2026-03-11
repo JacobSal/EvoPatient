@@ -12,29 +12,29 @@ from Simulated.simulated_patient.api_call import llm_api
 from Simulated.simulated_patient.agent_evolve import get_text_embedding
 
 
-# ============== 环境变量（隐去隐私信息，密钥由 llm_api 内部读取） ==============
+# ============== Environment variables (privacy hidden, keys read internally by llm_api) ==============
 load_dotenv()
 if not os.getenv("OPENAI_API_KEY"):
-    raise RuntimeError("未检测到 OPENAI_API_KEY，请在系统或 .env 中设置。")
+    raise RuntimeError("OPENAI_API_KEY not detected; please set it in the system or .env.")
 
 
-# ============== 工具函数 ==============
+# ============== Utility functions ==============
 def match_star(context: str) -> str:
-    """匹配 **...** 并返回去星号后的原文；找不到则抛出异常。"""
+    """Match **...** and return the original text without asterisks; raise an exception if not found."""
     m = re.search(r"\*\*(.*?)\*\*", context, flags=re.DOTALL)
     if not m:
-        raise ValueError("没有找到匹配项")
+        raise ValueError("No match found")
     return re.sub(r"\*", "", m.group(0))
 
 
 def read_prompt() -> dict:
-    """读取并拼接 Simulated/Prompt/prompt_data.json 中的各条 prompt。"""
+    """Read and concatenate the prompts from Simulated/Prompt/prompt_data.json."""
     p = Path("Simulated/Prompt/prompt_data.json")
     with p.open("r", encoding="utf-8") as f:
         data = json.load(f)
     final = {}
     for k, v in data.items():
-        # v 可能是列表（每行一段），拼接为完整 prompt
+        # v may be a list (each item a segment), join into a full prompt
         if isinstance(v, list):
             final[k] = "".join(v)
         else:
@@ -47,7 +47,7 @@ def ensure_parent(path: Path):
 
 
 def clean_token_count():
-    """清空 token 统计文件（相对路径）。"""
+    """Clear token count files (relative path)."""
     tp_overall = Path("./make_task/token_count/token_overall.txt")
     tp_stream = Path("./make_task/token_count/token_stream.txt")
     ensure_parent(tp_overall)
@@ -56,7 +56,7 @@ def clean_token_count():
 
 
 def get_token_count() -> str:
-    """读取累计 token（若不存在或为空则返回 '0'）。"""
+    """Read accumulated tokens (return '0' if the file does not exist or is empty)."""
     tp_stream = Path("./make_task/token_count/token_stream.txt")
     if not tp_stream.exists():
         return "0"
@@ -65,7 +65,7 @@ def get_token_count() -> str:
     return nums[-1] if nums else "0"
 
 
-# ============== 主流程 ==============
+# ============== Main flow ==============
 def cover(sheet_name: str = "病程记录_首次病程", row_number: int = 6, col_number: int = 1):
     clean_token_count()
 
@@ -73,22 +73,22 @@ def cover(sheet_name: str = "病程记录_首次病程", row_number: int = 6, co
     parent_folder = Path("pool")
     directory = parent_folder / test_label
     (directory / "doctor_record").mkdir(parents=True, exist_ok=True)
-    print(f"文件夹 {test_label} 已创建在 {parent_folder} 中。")
+    print(f"Folder {test_label} has been created under {parent_folder}.")
 
-    # 获取病人完整与模糊信息
+    # Get patient's full and vague information
     resource, vague_info = get_vague_patient_info(sheet_name, row_number, col_number)
 
-    # 保存 resource 与 vague 文本（相对路径）
+    # Save resource and vague text (relative path)
     (directory / "resource.txt").write_text(resource, encoding="utf-8")
     (directory / "vague.txt").write_text(vague_info, encoding="utf-8")
 
     prompt_data = read_prompt()
     patient = Patient(vague_info, resource, str(directory), prompt_data)
 
-    # 分配科室
+    # Assign department
     office = match_star(patient.assign_office())
 
-    # 生成主诉
+    # Generate main complaint
     def generate_main_complaint() -> str:
         patient_question = patient.generate_patient_question()
         patient_answer = match_star(patient_question)
@@ -97,16 +97,16 @@ def cover(sheet_name: str = "病程记录_首次病程", row_number: int = 6, co
 
     main_complaint = generate_main_complaint()
 
-    # 生成封面
+    # Generate cover
     prompt = prompt_data["cover"].format(office, resource)
     messages = [{"role": "user", "content": prompt}]
     response = llm_api(messages)
     print(response)
 
-    # 提取封面中可能的多项匹配
+    # Extract possible multiple matches from cover
     matched = re.findall(r"\*\*(.*?)\*\*", response, flags=re.DOTALL)
 
-    # 嵌入主诉并写入池表
+    # Embed main complaint and write to pool table
     emb = get_text_embedding(main_complaint)
 
     pool_csv = Path("dataset/pool.csv")
@@ -118,13 +118,13 @@ def cover(sheet_name: str = "病程记录_首次病程", row_number: int = 6, co
             writer.writerow(["main_complaint", "embedding_main_complaint", "question"])
         writer.writerow([
             main_complaint,
-            json.dumps(emb, ensure_ascii=False),         # 防止逗号影响 CSV
-            json.dumps(matched, ensure_ascii=False)      # 以 JSON 形式保存列表
+            json.dumps(emb, ensure_ascii=False),         # Prevent commas from affecting CSV
+            json.dumps(matched, ensure_ascii=False)      # Save list in JSON format
         ])
 
 
 def cache() -> int:
-    """读取/初始化 case_cache.txt 内的行号。"""
+    """Read/initialize the line number inside case_cache.txt."""
     cache_path = Path("./make_task/case_cache.txt")
     ensure_parent(cache_path)
     if not cache_path.exists():
@@ -142,7 +142,7 @@ def write_cache(value: int):
 
 if __name__ == "__main__":
     col_number = 1
-    sheet_name = "病程记录_首次病程"
+    sheet_name = "病程记录_首次病程"  # "Medical record_first visit"  # "Medical record_first visit"
 
     row_number = cache()
     while row_number <= 1300:

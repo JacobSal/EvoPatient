@@ -6,11 +6,12 @@ from pathlib import Path
 from Simulated.simulated_patient.api_call import llm_api
 from openai import OpenAI
 
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 BASE_URL = os.getenv("BASE_URL")
 
 if not OPENAI_API_KEY:
-    raise RuntimeError("未设置环境变量 OPENAI_API_KEY")
+    raise RuntimeError("OPENAI_API_KEY environment variable not set")
 
 client_kwargs = {"api_key": OPENAI_API_KEY}
 if BASE_URL:
@@ -115,7 +116,7 @@ def get_cosine_similarity(embeddingi, embeddingj):
 
 
 def quality_check(question, rag_info, answer):
-    json_file_path = Path("Simulated/Prompt/prompt_data.json")  # 相对路径
+    json_file_path = Path("Simulated/Prompt/prompt_data.json")  # relative path
     with json_file_path.open("r", encoding="utf-8") as file:
         data = json.load(file)
         prompt = "".join(data["quality_check_evolve"])
@@ -131,7 +132,7 @@ def store_patient_qa(directory, question, rag_info, answer, requirements):
     for stored_qus_embedding in qus_embedding_list:
         stored_qus_embedding = [float(item.strip()) for item in stored_qus_embedding.split(",")]
         if get_cosine_similarity(stored_qus_embedding, embedding_res) > 0.95:
-            print("此条问答已有相似例子，取消进化。")
+            print("A similar Q&A example already exists, cancelling evolution.")
             evolve_flag = 0
             break
     if evolve_flag:
@@ -150,7 +151,7 @@ def store_doctor_qa(directory, record):
         if get_cosine_similarity(stored_qus1_embedding, qus_1_emb) > 0.8 and get_cosine_similarity(
             stored_qus2_embedding, qus_2_emb
         ) > 0.8:
-            print("此条问答已有相似例子，取消进化。")
+            print("A similar Q&A example already exists, cancelling evolution.")
             evolve_flag = 0
             break
     if evolve_flag:

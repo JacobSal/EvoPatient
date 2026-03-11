@@ -2,15 +2,15 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
-# 允许从上一级目录导入本地工具（相对路径）
+# Allow importing local tools from parent directory (relative path)
 sys.path.append(str(Path.cwd().parent))
-from helper_functions import *          # 需要: PyPDFLoader, RecursiveCharacterTextSplitter, OpenAIEmbeddings, FAISS, replace_t_with_space
-from evaluation.evalute_rag import *    # 需要: retrieve_context_per_question, evaluate_rag
+from helper_functions import *          # Requires: PyPDFLoader, RecursiveCharacterTextSplitter, OpenAIEmbeddings, FAISS, replace_t_with_space
+from evaluation.evalute_rag import *    # Requires: retrieve_context_per_question, evaluate_rag
 
-# 从 .env 读取环境变量（OPENAI_API_KEY / 可选 OPENAI_API_BASE）
+# Load environment variables from .env (OPENAI_API_KEY / optional OPENAI_API_BASE)
 load_dotenv()
 
-# 相对路径 PDF（请将文件放在上级 data 目录，或自行调整）
+# Relative path to PDF (place file in parent data directory or adjust as needed)
 PDF_PATH = Path("../data/Multi-Agent Collaboration via Cross-Team Orchestration.pdf")
 
 def encode_pdf(path: Path, chunk_size: int = 1000, chunk_overlap: int = 200):
@@ -23,7 +23,7 @@ def encode_pdf(path: Path, chunk_size: int = 1000, chunk_overlap: int = 200):
     texts = text_splitter.split_documents(documents)
     cleaned_texts = replace_t_with_space(texts)
 
-    embeddings = OpenAIEmbeddings()  # 从环境变量读取密钥/基址
+    embeddings = OpenAIEmbeddings()  # Read key/base URL from environment variables
     vectorstore = FAISS.from_documents(cleaned_texts, embeddings)
     return vectorstore
 

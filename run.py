@@ -1,7 +1,7 @@
 from simulateflow import flow
 
 col_number = 1
-sheet_name = '病程记录_首次病程'
+sheet_name = '病程记录_首次病程'  # "Medical record_first visit"
 
 def cache():
     with open('./make_task/case_cache.txt', 'r', encoding='utf-8') as cc:

@@ -2,12 +2,12 @@ import os
 import re
 from openai import OpenAI
 
-# ===== 从环境变量中读取配置 =====
+# ===== Read configuration from environment variables =====
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-BASE_URL = os.getenv("BASE_URL")  # 例如：https://ark.cn-beijing.volces.com/api/v3
+BASE_URL = os.getenv("BASE_URL")  # e.g.: https://ark.cn-beijing.volces.com/api/v3
 
 if not OPENAI_API_KEY:
-    raise ValueError("❌ 未找到 OPENAI_API_KEY 环境变量，请先在系统中设置。")
+    raise ValueError("❌ OPENAI_API_KEY environment variable not found, please set it in the system first.")
 
 client_kwargs = {"api_key": OPENAI_API_KEY}
 if BASE_URL:
@@ -16,7 +16,7 @@ if BASE_URL:
 client = OpenAI(**client_kwargs)
 
 
-# ===== 功能函数 =====
+# ===== Utility functions =====# ===== Utility functions =====
 def token_counter(usage):
     file_path_overall = 'make_task/token_count/token_overall.txt'
     file_path_stream = 'make_task/token_count/token_stream.txt'
