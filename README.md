@@ -132,9 +132,8 @@ Simulated-patient/
 
 ### LLM API Settings
 Update API credentials in:
-- `Simulated/simulated_patient/api_call.py`
-- `embedding_function/qwen_embedding.py`
-- `profile/profile_generator.py`
+- `.env`
+    * ensure that python.terminal.useEnvFile is enabled in powershell, bash, or visual studios "Preferences: Open User Settings (JSON)".
 
 ### Simulation Parameters
 Adjust settings in:
